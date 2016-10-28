@@ -133,7 +133,7 @@ testQ8 = codeOne' (Node (Leaf 'a') (Node (Leaf 'b') (Leaf 'c'))) 'b' == [[R,L]]
 
 codeOne' :: Huff Char -> Char -> [Bits]
 codeOne' (Node l r) c' = map (L:) (codeOne' l c') ++ map (R:) (codeOne' r c')
-codeOne' (Leaf c)   c' | c==c'     = [[]]
+codeOne' (Leaf c)   c' | c == c'   = [[]]
                        | otherwise = []
 
 -- code tous les caracteres d'une chaine
@@ -152,7 +152,10 @@ testQ9 :: Bool
 testQ9 = decode (Node (Leaf 'a') (Node (Leaf 'b') (Leaf 'c'))) (Node (Leaf 'a') (Node (Leaf 'b') (Leaf 'c'))) [L,R,L,R,R,R,L,R,R,L,L] == "abcbcaa"
 
 decode :: Huff Char -> Huff Char -> Bits -> String
-decode = undefined
+decode (Node l r) tree (x:xs) | x == L = decode l tree xs
+                              | x == R = decode r tree xs
+decode (Leaf c)   tree bits   = c : decode tree tree bits
+decode _          _    []     = []
 
 -- verifie la correction en codange puis decodant et calcule le ratio de compression (hors arbre)
 
