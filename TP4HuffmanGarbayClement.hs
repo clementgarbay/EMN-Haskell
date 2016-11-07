@@ -62,7 +62,7 @@ testQ3 = insere (Leaf ('a',3)) [Leaf ('b',2),Leaf ('c',2)] == [Leaf ('b',2),Leaf
 insere :: Huff (a,Int) -> [Huff (a,Int)] -> [Huff (a,Int)]
 insere n []               = [n]
 insere n (x:xs)
-  | (poids n) > (poids x) = x : insere n xs
+  | poids n > poids x = x : insere n xs
   | otherwise             = n : x : xs
 
 -- Q4 [non rec def avec foldr]
@@ -164,10 +164,10 @@ test'''' = test10 exemple1 == (True,0.19642857)
 
 test10 :: String -> (Bool,Float)
 test10 s =
-    let t = buildHuff s
-        c = codeAll t s
+    let t  = buildHuff s
+        c  = codeAll t s
         s' = decode t t c
-    in (s==s',(fromIntegral (length c))/(fromIntegral (8*length s)))
+    in (s==s',fromIntegral (length c) / fromIntegral (8 * length s))
 
 -- Q10
 -- en 10 mots maximum identifier ce qui est recalcule de nombreuses fois et pourrait etre optimise dans ce code
